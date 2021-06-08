@@ -1,6 +1,6 @@
 <template>
     <div class="text-center">
-        <button type="submit" class="button">
+        <button type="submit" class="button is-info is-outlined">
             {{buttonName}}
         </button>
     </div>

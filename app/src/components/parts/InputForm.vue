@@ -1,11 +1,23 @@
 <template>
-    <input
-        :type="type"
-        :name="name"
-        :value="value"
-        :placeholder="placeholder"
-        v-model="email"
-  />
+<div class="field is-horizontal">
+  <div class="field-label is-normal ">
+    <label class="label is-size-7">{{label}}</label>
+  </div>
+   <div class="field-body">
+     <div class="field">
+       <div class="control">
+          <input
+           class="input"
+              :type="type"
+              :name="name"
+              :value="value"
+              :placeholder="placeholder"
+              v-model="email"
+          />
+       </div>
+     </div>
+   </div>
+</div>
 </template>
 <script>
 export default {
@@ -15,6 +27,7 @@ export default {
         type: { type: String, required: true },
         name: { type: String, required: true },
         placeholder: { type: String, required: false },
+        label: { type: String, required: false },
         v: { type: Object, required: true },
     },
     computed: {

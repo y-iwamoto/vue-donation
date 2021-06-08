@@ -1,40 +1,51 @@
 <template>
     <div>
         <Title :title="title" />
-        <form @submit.prevent="submit" novalidate>
-            <InputForm
-                v-model="newUser.name"
-                :v="$v.newUser.name"
-                placeholder="userName"
-                name="name"
-                type="text"
-             />
-            <InputForm
-                v-model="newUser.email"
-                :v="$v.newUser.email"
-                placeholder="E-mail"
-                name="email"
-                type="email"
-             />
-            <InputForm
-                v-model="newUser.password"
-                :v="$v.newUser.password"
-                placeholder="Password"
-                name="password"
-                type="password"
-             />
-             <ErrorMessage
-                :inputError="$v.newUser"
-                :getError="this.getError"
-                :displayServerError="this.displayServerError"
-             />
-             <AuthenticateButton
-                :buttonName="buttonName"
-             />
-             <AuthenticateLink
-                :nextLink="nextLink"
-                :Linkname="Linkname"
-             />
+        <form class="mt-5" @submit.prevent="submit" novalidate>
+            <div class="columns">
+                <div class="column"></div>
+                <div class="column column is-two-fifths">
+                    <InputForm
+                        v-model="newUser.name"
+                        :v="$v.newUser.name"
+                        placeholder="userName"
+                        name="name"
+                        type="text"
+                        :label="usernameLabel"
+                    />
+                    <InputForm
+                        v-model="newUser.email"
+                        :v="$v.newUser.email"
+                        placeholder="E-mail"
+                        name="email"
+                        type="email"
+                        :label="emailLabel"
+                    />
+                    <InputForm
+                        v-model="newUser.password"
+                        :v="$v.newUser.password"
+                        placeholder="Password"
+                        name="password"
+                        type="password"
+                        :label="passwordLabel"
+                    />
+                    <ErrorMessage
+                        :inputError="$v.newUser"
+                        :getError="this.getError"
+                        :displayServerError="this.displayServerError"
+                    />
+                    <div class="mt-5">
+                        <AuthenticateButton
+                            :buttonName="buttonName"
+                        />
+                        <AuthenticateLink
+                            :nextLink="nextLink"
+                            :Linkname="Linkname"
+                        />
+                    </div>
+                </div>
+                <div class="column"></div>
+            </div>
         </form>
     </div>
 </template>
@@ -69,6 +80,9 @@ export default {
             buttonName: '新規登録',
             nextLink: '/signup',
             Linkname: 'ログインはこちらから',
+            usernameLabel: 'ユーザ名',
+            emailLabel: 'メールアドレス',
+            passwordLabel: 'パスワード',
             newUser: {
                 name: "",
                 email: "",
