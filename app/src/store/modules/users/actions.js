@@ -29,6 +29,18 @@ const actions = {
     commit("setUserName", payload);
     // TODO: ダッシュボード遷移時実装のときに削除
     commit("setError", "新規アカウントを登録しました");
+  },
+  signIn({ commit }, payload) {
+    firebase
+      .auth()
+      .signInWithEmailAndPassword(payload.email, payload.password)
+      .then(() => {
+        commit("setError", "ログインしました");
+      })
+      .catch(error => {
+        console.error("error", error)
+        commit("setError", error.message);
+      });
   }
 };
 
