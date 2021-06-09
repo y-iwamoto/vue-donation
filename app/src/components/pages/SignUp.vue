@@ -78,7 +78,7 @@ export default {
         return {
             title: "新規登録画面",
             buttonName: '新規登録',
-            nextLink: '/signup',
+            nextLink: '/signin',
             Linkname: 'ログインはこちらから',
             usernameLabel: 'ユーザ名',
             emailLabel: 'メールアドレス',
