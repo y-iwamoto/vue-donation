@@ -1,7 +1,7 @@
 <template>
 <div class="field is-horizontal">
   <div class="field-label is-normal ">
-    <label class="label is-size-7">{{label}}</label>
+    <label class="label is-size-7">{{ label }}</label>
   </div>
    <div class="field-body">
      <div class="field">

@@ -1,5 +1,5 @@
 <template>
-    <router-link class="button is-ghost" :to="nextLink">{{Linkname}}</router-link>
+    <router-link class="button is-ghost" :to="nextLink">{{ Linkname }}</router-link>
 </template>
 <script>
 export default {

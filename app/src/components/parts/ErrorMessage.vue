@@ -7,7 +7,7 @@
             <div class="help is-danger is-size-6" v-if="!inputError.password.required">パスワードは必須入力です。</div>
         </div>
         <div v-if="getError && !inputError.$error">
-            <div class="help is-danger is-size-6">{{displayServerError}}</div>
+            <div class="help is-danger is-size-6">{{ displayServerError }}</div>
         </div>
     </div>
 </template>
