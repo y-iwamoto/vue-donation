@@ -6,31 +6,23 @@
                 <div class="column"></div>
                 <div class="column column is-two-fifths">
                     <InputForm
-                        v-model="newUser.name"
-                        :v="$v.newUser.name"
-                        placeholder="userName"
-                        name="name"
-                        type="text"
-                        :label="usernameLabel"
-                    />
-                    <InputForm
-                        v-model="newUser.email"
-                        :v="$v.newUser.email"
+                        v-model="loginUser.email"
+                        :v="$v.loginUser.email"
                         placeholder="E-mail"
                         name="email"
                         type="email"
                         :label="emailLabel"
                     />
                     <InputForm
-                        v-model="newUser.password"
-                        :v="$v.newUser.password"
+                        v-model="loginUser.password"
+                        :v="$v.loginUser.password"
                         placeholder="Password"
                         name="password"
                         type="password"
                         :label="passwordLabel"
                     />
                     <ErrorMessage
-                        :inputError="$v.newUser"
+                        :inputError="$v.loginUser"
                         :getError="this.getError"
                         :displayServerError="this.displayServerError"
                     />
@@ -58,33 +50,31 @@ import InputForm from '../parts/InputForm.vue'
 import ErrorMessage from '../parts/ErrorMessage.vue'
 import AuthenticateButton from '../parts/AuthenticateButton.vue'
 import AuthenticateLink from '../parts/AuthenticateLink.vue'
+
 export default {
-    name: 'SignUp',
+    name: 'SignIn',
     components: {
         Title,
         InputForm,
         ErrorMessage,
         AuthenticateButton,
-        AuthenticateLink
+        AuthenticateLink,
     },
     validations: {
-        newUser: {
-            name: { required },
+        loginUser: {
             email: { required, email },
             password: { required },
         }
     },
     data() {
         return {
-            title: "新規登録画面",
-            buttonName: '新規登録',
-            nextLink: '/signin',
-            Linkname: 'ログインはこちらから',
-            usernameLabel: 'ユーザ名',
+            title: "ログイン画面",
             emailLabel: 'メールアドレス',
             passwordLabel: 'パスワード',
-            newUser: {
-                name: "",
+            buttonName: 'ログイン',
+            nextLink: '/signup',
+            Linkname: '新規登録はこちらから',
+            loginUser: {
                 email: "",
                 password: ""
             }
@@ -92,22 +82,23 @@ export default {
     },
     computed: {...mapGetters("users",["getError"]),
         displayServerError() {
-            if (this.getError === 'The email address is already in use by another account.') {
-                return 'このメールアドレスはすでに登録済みです';
-            } else if (this.getError === '新規アカウントを登録しました') {
+             if (this.getError === 'There is no user record corresponding to this identifier. The user may have been deleted.') {
+                return 'メールアドレスまたはパスワードが合致しません';
+            } else if (this.getError === 'ログインしました') {
                 // TODO: ダッシュボード遷移時実装のときに削除
-                return '新規アカウントを登録しました';
+                return 'ログインしました';
             } else {
-                return ''
+                 return ''
             }
-        }
+         }
     },
+
     methods: {
-        ...mapActions("users",["signUp"]),
+        ...mapActions("users",["signIn"]),
         submit() {
-            this.$v.newUser.$touch();
-            if (this.$v.newUser.$pending || this.$v.newUser.$error) return;
-            this.signUp( { username: this.newUser.name ,email: this.newUser.email, password: this.newUser.password });
+            this.$v.loginUser.$touch();
+            if (this.$v.loginUser.$pending || this.$v.loginUser.$error) return;
+            this.signIn( { email: this.loginUser.email, password: this.loginUser.password });
         }
     }
 }
