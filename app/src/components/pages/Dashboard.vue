@@ -2,7 +2,7 @@
 <div class="columns">
     <div class="column"></div>
     <div class="column column is-two-fifths">
-        <DashBoardHeader
+        <DashboardHeader
             :username="getUser.username"
             :wallet="getUser.wallet"
         />
@@ -17,12 +17,12 @@
 <script>
 import { mapGetters } from "vuex";
 import Title from '../parts/Title.vue'
-import DashBoardHeader from '../parts/DashBoardHeader.vue'
+import DashboardHeader from '../parts/DashboardHeader.vue'
 export default {
-    name: "DashBoard",
+    name: "Dashboard",
     components: {
         Title,
-        DashBoardHeader
+        DashboardHeader
     },
     data() {
         return {

@@ -5,7 +5,7 @@
 </template>
 <script>
 export default {
-    name: "DashBoardHeader",
+    name: "DashboardHeader",
     props: ["username", "wallet"]
 }
 </script>

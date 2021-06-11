@@ -3,7 +3,7 @@ import Router from 'vue-router';
 
 import SignUp from '../components/pages/SignUp.vue'
 import SignIn from '../components/pages/SignIn.vue'
-import DashBoard from '../components/pages/DashBoard.vue'
+import Dashboard from '../components/pages/Dashboard.vue'
 
 Vue.use(Router);
 
@@ -22,8 +22,8 @@ export default new Router({
         },
         {
             path: '/',
-            name: 'DashBoard',
-            component: DashBoard
+            name: 'Dashboard',
+            component: Dashboard
         },
     ]
 })
