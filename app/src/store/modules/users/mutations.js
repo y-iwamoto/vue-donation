@@ -4,9 +4,10 @@ const mutations = {
       state.email = email;
       state.uid = uid;
     },
-    setUserName(state, payload) {
-        const {username } = payload;
+    setUserNameAndWallet(state, payload) {
+        const { username, wallet } = payload;
         state.username = username;
+        state.wallet = wallet
     },
     setError(state, payload) {
       state.error = payload;

@@ -84,9 +84,8 @@ export default {
         displayServerError() {
              if (this.getError === 'There is no user record corresponding to this identifier. The user may have been deleted.') {
                 return 'メールアドレスまたはパスワードが合致しません';
-            } else if (this.getError === 'ログインしました') {
-                // TODO: ダッシュボード遷移時実装のときに削除
-                return 'ログインしました';
+            } else if (this.getError === '不正なアカウントです。管理者にお問い合わせください。') {
+                return '不正なアカウントです。管理者にお問い合わせください。';
             } else {
                  return ''
             }

@@ -1,4 +1,5 @@
 import firebase from "firebase/app";
+import router from '../../../router/index'
 
 const actions = {
   signUp({ dispatch, commit }, payload) {
@@ -19,28 +20,44 @@ const actions = {
       });
   },
   saveUser({ commit }, payload) {
-    firebase.database().ref("donaition")
-        .push({
-            user: {
-                username: payload.username,
-                uid: payload.uid
-            }
+    firebase.database().ref('donaition/' + payload.uid)
+        .set({
+            username: payload.username,
+            uid: payload.uid,
+            wallet: 1000
         });
-    commit("setUserName", payload);
-    // TODO: ダッシュボード遷移時実装のときに削除
-    commit("setError", "新規アカウントを登録しました");
+    commit("setUserNameAndWallet", {
+      username: payload.username, wallet: 1000
+    });
+    router.push({path: '/'});
   },
-  signIn({ commit }, payload) {
+  signIn({ dispatch, commit }, payload) {
+    commit("setError", null);
     firebase
       .auth()
       .signInWithEmailAndPassword(payload.email, payload.password)
-      .then(() => {
-        commit("setError", "ログインしました");
+      .then((response) => {
+        dispatch('fetchUser', response)
       })
       .catch(error => {
         console.error("error", error)
         commit("setError", error.message);
       });
+  },
+  fetchUser({ commit }, payload) {
+    firebase.database().ref()
+      .child("donaition").child(payload.user.uid).get().then((snapshot) => {
+        if (snapshot.exists()) {
+          commit("setUserNameAndWallet", snapshot.val())
+          router.push({path: '/'});
+        } else {
+          commit("setError", "不正なアカウントです。管理者にお問い合わせください。");
+          router.push({path: '/signin'});
+        }
+      }).catch((error) => {
+        commit("setError", error.message);
+      });
+
   }
 };
 

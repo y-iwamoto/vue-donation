@@ -94,9 +94,6 @@ export default {
         displayServerError() {
             if (this.getError === 'The email address is already in use by another account.') {
                 return 'このメールアドレスはすでに登録済みです';
-            } else if (this.getError === '新規アカウントを登録しました') {
-                // TODO: ダッシュボード遷移時実装のときに削除
-                return '新規アカウントを登録しました';
             } else {
                 return ''
             }
