@@ -1,6 +1,10 @@
 <template>
-    <div class="is-flex is-justify-content-space-between mb-3">
-        <div>{{ username }}さんようこそ!!</div><div>残高：{{ wallet }}</div>
+    <div class="is-flex is-justify-content-space-between is-align-items-center mb-3">
+        <div>{{ username }}さんようこそ!!</div>
+        <div class="is-flex is-align-items-center ">
+            <div class="mr-5">残高：{{ wallet }}</div>
+            <slot name="button"></slot>
+        </div>
     </div>
 </template>
 <script>

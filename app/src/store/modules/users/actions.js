@@ -49,7 +49,7 @@ const actions = {
       .child("donaition").child(payload.user.uid).get().then((snapshot) => {
         if (snapshot.exists()) {
           commit("setUserNameAndWallet", snapshot.val())
-          router.push({path: '/'});
+          router.push({path: '/'}).catch(()=>{});
         } else {
           commit("setError", "不正なアカウントです。管理者にお問い合わせください。");
           router.push({path: '/signin'});
@@ -57,7 +57,30 @@ const actions = {
       }).catch((error) => {
         commit("setError", error.message);
       });
-
+  },
+  signOut({ commit }) {
+    firebase
+      .auth()
+      .signOut()
+      .then(() => {
+        commit("setUserInfo", { email: "", uid: "" });
+        commit("setUserNameAndWallet", { username: "", wallet: 0 });
+        router.push({path: '/signin'});
+      })
+      .catch(error => {
+        commit("setError", error.message);
+      });
+  },
+  checkUser({ dispatch, commit, state }) {
+    firebase.auth().onAuthStateChanged(user => {
+      if (!user) {
+        commit("setUserInfo", { email: "", uid: "" });
+        commit("setUserNameAndWallet", { username: "", wallet: 0 });
+        router.push({path: '/signin'}).catch(()=>{});
+      } else if (user && !state.username) {
+        dispatch('fetchUser', {user: user})
+      }
+    });
   }
 };
 
