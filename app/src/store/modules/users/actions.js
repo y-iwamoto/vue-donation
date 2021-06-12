@@ -83,6 +83,7 @@ const actions = {
           commit("setUserNameAndWallet", { username: "", wallet: 0 });
           reject(false)
         } else {
+          commit("setUserInfo", user);
           resolve(true)
         }
       });
