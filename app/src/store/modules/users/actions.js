@@ -31,13 +31,14 @@ const actions = {
     });
     router.push({path: '/'});
   },
-  signIn({ dispatch, commit }, payload) {
+  signIn({ commit }, payload) {
     commit("setError", null);
     firebase
       .auth()
       .signInWithEmailAndPassword(payload.email, payload.password)
       .then((response) => {
-        dispatch('fetchUser', response)
+        commit("setUserInfo", response.user);
+        router.push({path: '/'});
       })
       .catch(error => {
         console.error("error", error)
@@ -45,18 +46,21 @@ const actions = {
       });
   },
   fetchUser({ commit }, payload) {
-    firebase.database().ref()
-      .child("donaition").child(payload.user.uid).get().then((snapshot) => {
+    return new Promise((resolve, reject) => {
+      firebase.database().ref()
+      .child("donaition").child(payload.uid).get().then((snapshot) => {
         if (snapshot.exists()) {
           commit("setUserNameAndWallet", snapshot.val())
-          router.push({path: '/'}).catch(()=>{});
+          resolve(true)
         } else {
           commit("setError", "不正なアカウントです。管理者にお問い合わせください。");
-          router.push({path: '/signin'});
+          reject(false)
         }
       }).catch((error) => {
         commit("setError", error.message);
+        reject(false)
       });
+    })
   },
   signOut({ commit }) {
     firebase
@@ -71,16 +75,18 @@ const actions = {
         commit("setError", error.message);
       });
   },
-  checkUser({ dispatch, commit, state }) {
-    firebase.auth().onAuthStateChanged(user => {
-      if (!user) {
-        commit("setUserInfo", { email: "", uid: "" });
-        commit("setUserNameAndWallet", { username: "", wallet: 0 });
-        router.push({path: '/signin'}).catch(()=>{});
-      } else if (user && !state.username) {
-        dispatch('fetchUser', {user: user})
-      }
-    });
+  checkUser({ commit }) {
+    return new Promise((resolve, reject) => {
+      firebase.auth().onAuthStateChanged(user => {
+        if (!user) {
+          commit("setUserInfo", { email: "", uid: "" });
+          commit("setUserNameAndWallet", { username: "", wallet: 0 });
+          reject(false)
+        } else {
+          resolve(true)
+        }
+      });
+    })
   }
 };
 
