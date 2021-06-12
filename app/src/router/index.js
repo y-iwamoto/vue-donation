@@ -14,7 +14,13 @@ router.beforeEach(async (to, from, next) => {
     try {
         if (to.matched.some(record => record.meta.requiresAuth)) {
             const valid = await store.dispatch('users/checkUser')
-            valid ? next() : next({ path: '/signin' })
+            if (valid) {
+                if (!store.getters["users/getAuthenticateInfo"].uid) next({ path: '/signin' })
+                store.dispatch('users/fetchUser', store.getters["users/getAuthenticateInfo"])
+                .then(() => next()).catch(() => {});
+            } else {
+                next({ path: '/signin' })
+            }
         } else {
             next()
         }

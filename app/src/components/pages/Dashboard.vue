@@ -40,9 +40,6 @@ export default {
             buttonName: "ログアウト"
         }
     },
-    mounted() {
-        this.checkUser({});
-    },
     computed: {...mapGetters("users",["getUser"])},
     methods: {
         ...mapActions("users",["signOut", "checkUser"]),
