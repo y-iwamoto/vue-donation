@@ -1,29 +1,38 @@
 import Vue from 'vue';
-import Router from 'vue-router';
+import VueRouter from 'vue-router';
 
-import SignUp from '../components/pages/SignUp.vue'
-import SignIn from '../components/pages/SignIn.vue'
-import Dashboard from '../components/pages/Dashboard.vue'
+import routes from './routes';
+import store from '../store';
 
-Vue.use(Router);
+Vue.use(VueRouter);
+let router = new VueRouter({
+  mode: 'history',
+  routes
+});
 
-export default new Router({
-    mode: 'history',
-    routes: [
-        {
-            path: '/signup',
-            name: 'SignUp',
-            component: SignUp
-        },
-        {
-            path: '/signin',
-            name: 'SignIn',
-            component: SignIn
-        },
-        {
-            path: '/',
-            name: 'Dashboard',
-            component: Dashboard
-        },
-    ]
-})
+router.beforeEach(async (to, from, next) => {
+  try {
+    if (to.matched.some(record => record.meta.requiresAuth)) {
+      const valid = await store.dispatch('users/checkUser');
+      if (valid) {
+        if (!store.getters['users/getAuthenticateInfo'].uid)
+          next({ path: '/signin' });
+        store
+          .dispatch(
+            'users/fetchUser',
+            store.getters['users/getAuthenticateInfo']
+          )
+          .then(() => next())
+          .catch(() => {});
+      } else {
+        next({ path: '/signin' });
+      }
+    } else {
+      next();
+    }
+  } catch (e) {
+    next({ path: '/signin' });
+  }
+});
+
+export default router;

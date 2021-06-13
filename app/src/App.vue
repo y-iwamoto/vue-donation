@@ -1,19 +1,18 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <router-view/>
+    <img alt="Vue logo" src="./assets/logo.png" />
+    <router-view />
   </div>
 </template>
 
 <script>
-
 export default {
-  name: 'App',
-}
+  name: 'App'
+};
 </script>
 
 <style lang="scss">
-@import "../node_modules/bulma/bulma.sass";
+@import '../node_modules/bulma/bulma.sass';
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
