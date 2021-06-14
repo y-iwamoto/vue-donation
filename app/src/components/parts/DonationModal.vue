@@ -30,13 +30,15 @@ export default {
   props: ['wallet', 'myWallet'],
   data() {
     return {
-      donation: 0
+      donation: 1
     };
   },
   computed: {
     isValidDonation: function() {
       if (this.donation > this.myWallet.wallet) {
         return '寄付できる金額を超えています';
+      } else if (this.donation < 1) {
+        return '0より大きな値を設定してください';
       }
       return false;
     }
