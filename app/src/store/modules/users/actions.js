@@ -22,7 +22,7 @@ const actions = {
   saveUser({ commit }, payload) {
     firebase
       .database()
-      .ref('donaition/' + payload.uid)
+      .ref('donation/' + payload.uid)
       .set({
         username: payload.username,
         uid: payload.uid,
@@ -53,7 +53,7 @@ const actions = {
       firebase
         .database()
         .ref()
-        .child('donaition')
+        .child('donation')
         .child(payload.uid)
         .get()
         .then(snapshot => {

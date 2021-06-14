@@ -6,7 +6,7 @@ const actions = {
     const myUid = store.getters['users/getAuthenticateInfo'].uid;
     firebase
       .database()
-      .ref('donaition')
+      .ref('donation')
       .on('value', function(snapshot) {
         const wallets = Object.keys(snapshot.val())
           .map(function(key) {
