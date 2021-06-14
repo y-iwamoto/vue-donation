@@ -8,7 +8,7 @@ const actions = {
       .auth()
       .createUserWithEmailAndPassword(payload.email, payload.password)
       .then(response => {
-        commit('setUserInfo', response.user);
+        commit('setMyWalletInfo', response.user);
         dispatch('saveUser', {
           username: payload.username,
           uid: response.user.uid
@@ -22,7 +22,7 @@ const actions = {
   saveUser({ commit }, payload) {
     firebase
       .database()
-      .ref('donaition/' + payload.uid)
+      .ref('donation/' + payload.uid)
       .set({
         username: payload.username,
         uid: payload.uid,
@@ -40,7 +40,7 @@ const actions = {
       .auth()
       .signInWithEmailAndPassword(payload.email, payload.password)
       .then(response => {
-        commit('setUserInfo', response.user);
+        commit('setMyWalletInfo', response.user);
         router.push({ path: '/' });
       })
       .catch(error => {
@@ -53,7 +53,7 @@ const actions = {
       firebase
         .database()
         .ref()
-        .child('donaition')
+        .child('donation')
         .child(payload.uid)
         .get()
         .then(snapshot => {
@@ -79,7 +79,7 @@ const actions = {
       .auth()
       .signOut()
       .then(() => {
-        commit('setUserInfo', { email: '', uid: '' });
+        commit('setMyWalletInfo', { email: '', uid: '' });
         commit('setUserNameAndWallet', { username: '', wallet: 0 });
         router.push({ path: '/signin' });
       })
@@ -91,11 +91,11 @@ const actions = {
     return new Promise((resolve, reject) => {
       firebase.auth().onAuthStateChanged(user => {
         if (!user) {
-          commit('setUserInfo', { email: '', uid: '' });
+          commit('setMyWalletInfo', { email: '', uid: '' });
           commit('setUserNameAndWallet', { username: '', wallet: 0 });
           reject(false);
         } else {
-          commit('setUserInfo', user);
+          commit('setMyWalletInfo', user);
           resolve(true);
         }
       });

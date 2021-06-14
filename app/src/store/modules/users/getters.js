@@ -1,5 +1,5 @@
 const getters = {
-  getUser(state) {
+  getMyWalletInfo(state) {
     return { username: state.username, wallet: state.wallet };
   },
   getAuthenticateInfo(state) {

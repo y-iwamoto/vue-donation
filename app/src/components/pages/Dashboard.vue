@@ -3,18 +3,25 @@
     <div class="column"></div>
     <div class="column column is-two-fifths">
       <form @submit.prevent="submit" novalidate>
-        <DashboardHeader :username="getUser.username" :wallet="getUser.wallet">
+        <DashboardHeader
+          :username="getMyWalletInfo.username"
+          :wallet="getMyWalletInfo.wallet"
+        >
           <template v-slot:button>
             <AuthenticateButton :buttonName="buttonName" />
           </template>
         </DashboardHeader>
       </form>
       <Title :title="title" />
-      <div class="mt-3">
-        <h2 class="is-size-5 has-text-weight-bold">
-          ユーザ名
-        </h2>
-      </div>
+      <WalletUserList
+        :Wallets="getWallets"
+        @open="openCheckWalletModal($event)"
+      />
+      <CheckWalletModal
+        :wallet="targetCheckWallet"
+        v-show="showCheckWalletModal"
+        @close="closeCheckWalletModal"
+      />
     </div>
     <div class="column"></div>
   </div>
@@ -24,26 +31,45 @@ import { mapActions, mapGetters } from 'vuex';
 import Title from '../parts/Title.vue';
 import DashboardHeader from '../parts/DashboardHeader.vue';
 import AuthenticateButton from '../parts/AuthenticateButton.vue';
+import WalletUserList from '../parts/WalletUserList.vue';
+import CheckWalletModal from '../parts/CheckWalletModal.vue';
 export default {
   name: 'Dashboard',
   components: {
     Title,
     DashboardHeader,
-    AuthenticateButton
+    AuthenticateButton,
+    CheckWalletModal,
+    WalletUserList
   },
+
   data() {
     return {
       title: 'ユーザ一覧',
-      buttonName: 'ログアウト'
+      buttonName: 'ログアウト',
+      showCheckWalletModal: false,
+      targetCheckWallet: {}
     };
   },
+  mounted() {
+    this.fetchWalletList();
+  },
   computed: {
-    ...mapGetters('users', ['getUser'])
+    ...mapGetters('users', ['getMyWalletInfo']),
+    ...mapGetters('wallets', ['getWallets'])
   },
   methods: {
     ...mapActions('users', ['signOut', 'checkUser']),
+    ...mapActions('wallets', ['fetchWalletList']),
     submit() {
       this.signOut({});
+    },
+    openCheckWalletModal(wallet) {
+      this.showCheckWalletModal = true;
+      this.targetCheckWallet = wallet;
+    },
+    closeCheckWalletModal() {
+      this.showCheckWalletModal = false;
     }
   }
 };

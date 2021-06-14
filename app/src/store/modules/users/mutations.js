@@ -1,5 +1,5 @@
 const mutations = {
-  setUserInfo(state, payload) {
+  setMyWalletInfo(state, payload) {
     const { email, uid } = payload;
     state.email = email;
     state.uid = uid;
