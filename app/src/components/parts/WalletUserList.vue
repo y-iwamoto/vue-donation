@@ -12,7 +12,9 @@
           <button @click="click(wallet)" class="button is-primary mr-2">
             walletを見る
           </button>
-          <button class="button is-primary">送る</button>
+          <button @click="clickDonation(wallet)" class="button is-primary">
+            送る
+          </button>
         </div>
       </li>
     </ul>
@@ -25,6 +27,9 @@ export default {
   methods: {
     click: function(wallet) {
       this.$emit('open', wallet);
+    },
+    clickDonation: function(wallet) {
+      this.$emit('openDonation', wallet);
     }
   }
 };

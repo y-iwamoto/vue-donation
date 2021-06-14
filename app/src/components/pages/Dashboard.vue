@@ -16,11 +16,19 @@
       <WalletUserList
         :Wallets="getWallets"
         @open="openCheckWalletModal($event)"
+        @openDonation="openDonationModal($event)"
       />
       <CheckWalletModal
         :wallet="targetCheckWallet"
         v-show="showCheckWalletModal"
         @close="closeCheckWalletModal"
+      />
+      <DonationModal
+        :wallet="targetdonationInfo"
+        :myWallet="getMyWalletInfo"
+        v-show="showDonationModal"
+        @submit="submitDonation($event)"
+        @close="closeDonationModal"
       />
     </div>
     <div class="column"></div>
@@ -33,6 +41,7 @@ import DashboardHeader from '../parts/DashboardHeader.vue';
 import AuthenticateButton from '../parts/AuthenticateButton.vue';
 import WalletUserList from '../parts/WalletUserList.vue';
 import CheckWalletModal from '../parts/CheckWalletModal.vue';
+import DonationModal from '../parts/DonationModal.vue';
 export default {
   name: 'Dashboard',
   components: {
@@ -40,7 +49,8 @@ export default {
     DashboardHeader,
     AuthenticateButton,
     CheckWalletModal,
-    WalletUserList
+    WalletUserList,
+    DonationModal
   },
 
   data() {
@@ -48,21 +58,36 @@ export default {
       title: 'ユーザ一覧',
       buttonName: 'ログアウト',
       showCheckWalletModal: false,
-      targetCheckWallet: {}
+      showDonationModal: false,
+      targetCheckWallet: {},
+      targetdonationInfo: {}
     };
   },
   mounted() {
     this.fetchWalletList();
   },
   computed: {
-    ...mapGetters('users', ['getMyWalletInfo']),
+    ...mapGetters('users', ['getMyWalletInfo', 'getAuthenticateInfo']),
     ...mapGetters('wallets', ['getWallets'])
   },
   methods: {
     ...mapActions('users', ['signOut', 'checkUser']),
-    ...mapActions('wallets', ['fetchWalletList']),
+    ...mapActions('wallets', ['fetchWalletList', 'requestDonation']),
     submit() {
       this.signOut({});
+    },
+    submitDonation(wallet) {
+      this.requestDonation({
+        targetWallet: {
+          donation: Number(wallet.donation),
+          uid: wallet.uid
+        },
+        myWallet: {
+          donation: 0 - Number(wallet.donation),
+          uid: this.getAuthenticateInfo.uid
+        }
+      });
+      this.showDonationModal = false;
     },
     openCheckWalletModal(wallet) {
       this.showCheckWalletModal = true;
@@ -70,6 +95,13 @@ export default {
     },
     closeCheckWalletModal() {
       this.showCheckWalletModal = false;
+    },
+    openDonationModal(wallet) {
+      this.showDonationModal = true;
+      this.targetdonationInfo = wallet;
+    },
+    closeDonationModal() {
+      this.showDonationModal = false;
     }
   }
 };
