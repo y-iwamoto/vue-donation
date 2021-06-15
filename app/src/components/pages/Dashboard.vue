@@ -13,6 +13,9 @@
         </DashboardHeader>
       </form>
       <Title :title="title" />
+      <div v-if="getError">
+        <div class="help is-danger is-size-6">{{ getError }}</div>
+      </div>
       <WalletUserList
         :Wallets="getWallets"
         @open="openCheckWalletModal($event)"
@@ -68,7 +71,7 @@ export default {
   },
   computed: {
     ...mapGetters('users', ['getMyWalletInfo', 'getAuthenticateInfo']),
-    ...mapGetters('wallets', ['getWallets'])
+    ...mapGetters('wallets', ['getWallets', 'getError'])
   },
   methods: {
     ...mapActions('users', ['signOut', 'checkUser']),

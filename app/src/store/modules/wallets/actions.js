@@ -17,14 +17,14 @@ const actions = {
       });
   },
   async requestDonation({ dispatch, commit }, payload) {
+    commit('setError', null);
     const targetWallet = await dispatch(
       'fetchLatestWallet',
       payload.targetWallet
     );
-    await dispatch('adjustMoney', targetWallet);
 
     const myWallet = await dispatch('fetchLatestWallet', payload.myWallet);
-    await dispatch('adjustMoney', myWallet);
+    await dispatch('adjustWallet', { targetWallet, myWallet });
     commit(
       'users/setUserNameAndWallet',
       {
@@ -35,13 +35,29 @@ const actions = {
     );
     dispatch('fetchWalletList');
   },
-  async adjustMoney(_, payload) {
-    let updateData = {};
-    updateData['/donation/' + payload.uid + '/wallet'] = payload.wallet;
-    return await firebase
-      .database()
-      .ref()
-      .update(updateData);
+  async adjustWallet({ commit }, payload) {
+    const donationRef = firebase.database().ref('/donation');
+    return await donationRef.transaction(
+      currentData => {
+        if (
+          currentData &&
+          currentData[payload.targetWallet.uid] &&
+          currentData[payload.myWallet.uid]
+        ) {
+          currentData[payload.targetWallet.uid].wallet =
+            payload.targetWallet.wallet;
+          currentData[payload.myWallet.uid].wallet = payload.myWallet.wallet;
+          return currentData;
+        } else {
+          return;
+        }
+      },
+      (error, committed) => {
+        if (error || !committed) {
+          commit('setError', '送金に失敗しました。管理者に問い合わせください');
+        }
+      }
+    );
   },
   async fetchLatestWallet(_, payload) {
     const userInfo = await firebase
