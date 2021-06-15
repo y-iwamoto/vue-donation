@@ -25,10 +25,10 @@ export default {
   name: 'WalletUserList',
   props: ['Wallets'],
   methods: {
-    click: function(wallet) {
+    click(wallet) {
       this.$emit('open', wallet);
     },
-    clickDonation: function(wallet) {
+    clickDonation(wallet) {
       this.$emit('openDonation', wallet);
     }
   }
