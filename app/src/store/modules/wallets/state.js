@@ -1,5 +1,5 @@
 const state = () => ({
-  error: {},
+  error: null,
   wallets: []
 });
 export default state;
