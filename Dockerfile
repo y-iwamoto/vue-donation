@@ -2,9 +2,6 @@ FROM node:16-alpine3.11 as build-stage
 
 WORKDIR /app
 
-RUN apk update && \
-    npm install -g npm @vue/cli
-
 COPY /app/package*.json ./
 
 RUN npm install
