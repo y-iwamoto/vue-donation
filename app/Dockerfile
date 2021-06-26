@@ -2,16 +2,16 @@ FROM node:16-alpine3.11 as build-stage
 
 WORKDIR /app
 
-COPY /app/package*.json ./
+COPY /package*.json ./
 
 RUN npm install
 
-COPY /app/. .
+COPY /. .
 
 RUN npm run build
 
 FROM nginx:alpine as production-stage
-COPY ./.nginx/nginx.conf /etc/nginx/nginx.conf
+COPY ./nginx.conf /etc/nginx/nginx.conf
 
 RUN rm -rf /usr/share/nginx/html/*
 
